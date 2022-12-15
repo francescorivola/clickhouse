@@ -611,8 +611,9 @@ class QueryCursor {
 				);
 			}
 			
-			if ( ! res.body) {
-				return cb(null, {r: 1});
+			if (!res.body) {
+				const summary = JSON.parse(res.headers['x-clickhouse-summary'] || '{}');
+				return cb(null, { writtenRows: Number(summary.written_rows), r:1 });
 			}
 
 			try {
